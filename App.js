@@ -2,13 +2,33 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const botToken = "ODU4NzY5NTgxNTYwNTYxNjc0.YNi9fw.dvTg2J-Y8UCf3ML35eHKUwERSHk";
 
+const prefix = "!";
+const curseWords = ["လီးပဲ", "ငါလိုးမသား", "မအေလိုး", "ကိုမေကိုလိုး", "စောက်ရူး", "နွား", "စောက်သုံးမကျတဲ့"];
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+}
+
 client.on('ready', () => {
     console.log(`Logged in...`);
 });
 
 client.on('message', msg => {
+
     if(msg.author.bot) return;
-    msg.reply(`လီးပဲ ${msg.author.username}`);
+    if(!msg.content.startsWith(prefix))return;
+    const commandBody = msg.content.slice(prefix.length);
+    const [command, parameter] = commandBody.split(" ");
+    if(command === "curse"){
+        let replyMessage = "";
+        if(parameter){
+            replyMessage = `${curseWords[Math.floor(Math.random()*curseWords.length)]} ${parameter}`;
+        }else {
+            replyMessage = `${curseWords[Math.floor(Math.random()*curseWords.length)]} ${msg.author.username}`;
+        }
+        msg.reply(replyMessage);
+    }
 });
 
 client.login(botToken);
