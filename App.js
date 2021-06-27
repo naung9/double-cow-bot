@@ -16,7 +16,7 @@ client.on('message', msg => {
     const commandBody = msg.content.slice(prefix.length);
     const [command, parameter] = commandBody.split(" ");
     if(command === "curse"){
-        let replyMessage = "";
+        let replyMessage;
         if(parameter){
             replyMessage = `${curseWords[Math.floor(Math.random()*curseWords.length)]} ${parameter}`;
         }else {
