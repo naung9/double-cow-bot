@@ -14,15 +14,18 @@ client.on('message', msg => {
     if(msg.author.bot) return;
     if(!msg.content.startsWith(prefix))return;
     const commandBody = msg.content.slice(prefix.length);
-    const [command, parameter] = commandBody.split(" ", 1);
-    if(command === "curse"){
+    const commands = commandBody.split(" ");
+    if(commands[0] === "curse"){
         let replyMessage;
-        if(parameter){
-            replyMessage = `${curseWords[Math.floor(Math.random()*curseWords.length)]} ${parameter}`;
+        if(commands.length > 1){
+            replyMessage = `${curseWords[Math.floor(Math.random()*curseWords.length)]} ${commands.reduce((acc, current, index)=>{
+                if(index > 0) return acc + current;
+                else return acc;
+            }), ""}`;
         }else {
             replyMessage = `${curseWords[Math.floor(Math.random()*curseWords.length)]} ${msg.author.username}`;
         }
-        msg.reply({split: false, content: replyMessage});
+        msg.channel.send(replyMessage);
     }
 });
 
