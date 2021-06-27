@@ -15,13 +15,14 @@ client.on('message', msg => {
     if(!msg.content.startsWith(prefix))return;
     const commandBody = msg.content.slice(prefix.length);
     const commands = commandBody.split(" ");
+    console.log(commands);
     if(commands[0] === "curse"){
         let replyMessage;
         if(commands.length > 1){
             replyMessage = `${curseWords[Math.floor(Math.random()*curseWords.length)]} ${commands.reduce((acc, current, index)=>{
-                if(index > 0) return acc + current;
+                if(index > 0) return acc + " " + current;
                 else return acc;
-            }), ""}`;
+            }, "")}`;
         }else {
             replyMessage = `${curseWords[Math.floor(Math.random()*curseWords.length)]} ${msg.author.username}`;
         }
