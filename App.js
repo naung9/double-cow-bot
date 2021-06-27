@@ -14,7 +14,7 @@ client.on('message', msg => {
     if(msg.author.bot) return;
     if(!msg.content.startsWith(prefix))return;
     const commandBody = msg.content.slice(prefix.length);
-    const [command, parameter] = commandBody.split(" ");
+    const [command, parameter] = commandBody.split(" ", 1);
     if(command === "curse"){
         let replyMessage;
         if(parameter){
@@ -22,7 +22,7 @@ client.on('message', msg => {
         }else {
             replyMessage = `${curseWords[Math.floor(Math.random()*curseWords.length)]} ${msg.author.username}`;
         }
-        msg.reply(replyMessage);
+        msg.reply({split: false, content: replyMessage});
     }
 });
 
