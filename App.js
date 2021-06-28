@@ -54,7 +54,7 @@ client.on('message', msg => {
             if((commands[2].startsWith("\"") && commands[2].endsWith("\"")) || (commands[2].startsWith("'") && commands[2].endsWith("'")))
             object = commands[2];
         }
-        console.log(`${subject} က ${object} ဆီမှာ ${relayWords[Math.floor(Math.random()*relayWords.length)]}လို့တဲ့`);
+        replyMessage = `${subject} က ${object} ဆီမှာ ${relayWords[Math.floor(Math.random()*relayWords.length)]}လို့တဲ့`;
     }
     else if(commands[0].toLowerCase() === "noob"){
         if(commands.length > 1){
