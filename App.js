@@ -46,15 +46,15 @@ client.on('message', msg => {
     else if(commands[0].toLowerCase() === "relay"){
         let subject = msg.author.username;
         let object = dcMembers[Math.floor(Math.random()*curseWords.length)];
-        if(commands.length < 3){
+        if(commands.length > 1){
             if((commands[1].startsWith("\"") && commands[1].endsWith("\"")) || (commands[1].startsWith("'") && commands[1].endsWith("'")))
             subject = commands[1];
         }
-        if(commands.length < 4){
+        if(commands.length > 2 ){
             if((commands[2].startsWith("\"") && commands[2].endsWith("\"")) || (commands[2].startsWith("'") && commands[2].endsWith("'")))
             object = commands[2];
         }
-        replyMessage = `${subject} က ${object} ဆီမှာ ${relayWords[Math.floor(Math.random()*relayWords.length)]}လို့တဲ့`;
+        console.log(`${subject} က ${object} ဆီမှာ ${relayWords[Math.floor(Math.random()*relayWords.length)]}လို့တဲ့`);
     }
     else if(commands[0].toLowerCase() === "noob"){
         if(commands.length > 1){
