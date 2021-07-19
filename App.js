@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const botToken = "ODU4NzY5NTgxNTYwNTYxNjc0.YNi9fw.dvTg2J-Y8UCf3ML35eHKUwERSHk";
+const botToken = process.env.DISCORD_BOT_TOKEN;
 
 const prefix = "!";
 const curseWords = ["လီးပဲ", "ငါလိုးမသား", "မအေလိုး", "ကိုမေကိုလိုး", "စောက်ရူး", "နွား", "စောက်သုံးမကျ"];
@@ -44,6 +44,7 @@ client.on('message', msg => {
 
     }
     else if(commands[0].toLowerCase() === "relay"){
+
         let subject = msg.author.username;
         let object = dcMembers[Math.floor(Math.random()*curseWords.length)];
         if(commands.length > 1){
