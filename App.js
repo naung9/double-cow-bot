@@ -98,8 +98,8 @@ client.on('message', msg => {
                             try {
                                 const match = await (await fetch(`https://api.opendota.com/api/matches/${result["match_id"]}`)).json();
                                 const playerInfo = match.players.find(player => player["account_id"] && player["account_id"].toString() === dotaId.toString());
-                                const started = new Date(result["start_time"] * 1000);
-                                const ended = new Date((result["start_time"] + result["duration"] || 0) * 1000);
+                                const started = new Date(result["start_time"] * 1000).toLocaleString("en-US", {timeZone: "Asia/Yangon"});
+                                const ended = new Date((result["start_time"] + result["duration"] || 0) * 1000).toLocaleString("en-US", {timeZone: "Asia/Yangon"});
                                 const duration = Math.floor(result["duration"] / 60) + ":" + (result["duration"] % 60);
                                 const hero = dotaHeros.find(hero => hero.id === result["hero_id"])["localized_name"];
                                 message += `\n ${playerInfo.win === 1 ? "WON" : "LOST"}${playerInfo.isRadiant ? "(Radiant)" : "(Dire)"}\n Score\t:    ${match["radiant_score"]}${match["radiant_win"] ? "(W)" : "(L)"}:${match["dire_score"]}${match["radiant_win"] ? "(L)" : "(W)"}\n  Start\t:   ${started}\n End\t:   ${ended}\n Duration\t:   ${duration}\n Hero\t:   ${hero}\n K/D/A\t:   ${result["kills"]}/${result["deaths"]}/${result["assists"]}\n GPM\t:   ${result["gold_per_min"]}\n XPM\t:   ${result["xp_per_min"]}\n`;
