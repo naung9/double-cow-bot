@@ -83,34 +83,39 @@ client.on('message', msg => {
     else if (commands[0].toLowerCase() === "dota"){
         if(commands.length > 1){
             const [command, ...params] = commands;
-            let dotaId = params.join("");
+            let dotaId = params.join(" ");
+            console.log(dotaId);
             dotaId = !isNaN(dotaId) ? dotaId : dotaIDs[dotaId.toLowerCase()];
             console.log(dotaId);
-            fetch(`https://api.opendota.com/api/players/${dotaId}/recentMatches`).then(async response => {
-                if(dotaHeros.length > 0){
-                    const recentMatches = (await response.json()).slice(0, 5);
-                    console.log(recentMatches.length);
-                    let message = "";
-                    for(let i = 0; i < recentMatches.length; i++){
-                        const result = recentMatches[i];
-                        try {
-                            const match = await (await fetch(`https://api.opendota.com/api/matches/${result["match_id"]}`)).json();
-                            const playerInfo = match.players.find(player => player["account_id"] && player["account_id"].toString() === dotaId.toString());
-                            const started = new Date(result["start_time"] * 1000);
-                            const ended = new Date((result["start_time"] + result["duration"] || 0) * 1000);
-                            const duration = Math.floor(result["duration"] / 60) + ":" + (result["duration"] % 60);
-                            const hero = dotaHeros.find(hero => hero.id === result["hero_id"])["localized_name"];
-                            message += `\n ${playerInfo.win === 1 ? "WON" : "LOST"}${playerInfo.isRadiant ? "(Radiant)" : "(Dire)"}\n Score\t:    ${match["radiant_score"]}${match["radiant_win"] ? "(W)" : "(L)"}:${match["dire_score"]}${match["radiant_win"] ? "(L)" : "(W)"}\n  Start\t:   ${started}\n End\t:   ${ended}\n Duration\t:   ${duration}\n Hero\t:   ${hero}\n K/D/A\t:   ${result["kills"]}/${result["deaths"]}/${result["assists"]}\n GPM\t:   ${result["gold_per_min"]}\n XPM\t:   ${result["xp_per_min"]}\n`;
-                        }catch (e){
-                            message += "\nError Retrieving Match Data\n";
-                            console.error(message);
+            if(!isNaN(dotaId)) {
+                fetch(`https://api.opendota.com/api/players/${dotaId}/recentMatches`).then(async response => {
+                    if (dotaHeros.length > 0) {
+                        const recentMatches = (await response.json()).slice(0, 5);
+                        console.log(recentMatches.length);
+                        let message = "";
+                        for (let i = 0; i < recentMatches.length; i++) {
+                            const result = recentMatches[i];
+                            try {
+                                const match = await (await fetch(`https://api.opendota.com/api/matches/${result["match_id"]}`)).json();
+                                const playerInfo = match.players.find(player => player["account_id"] && player["account_id"].toString() === dotaId.toString());
+                                const started = new Date(result["start_time"] * 1000);
+                                const ended = new Date((result["start_time"] + result["duration"] || 0) * 1000);
+                                const duration = Math.floor(result["duration"] / 60) + ":" + (result["duration"] % 60);
+                                const hero = dotaHeros.find(hero => hero.id === result["hero_id"])["localized_name"];
+                                message += `\n ${playerInfo.win === 1 ? "WON" : "LOST"}${playerInfo.isRadiant ? "(Radiant)" : "(Dire)"}\n Score\t:    ${match["radiant_score"]}${match["radiant_win"] ? "(W)" : "(L)"}:${match["dire_score"]}${match["radiant_win"] ? "(L)" : "(W)"}\n  Start\t:   ${started}\n End\t:   ${ended}\n Duration\t:   ${duration}\n Hero\t:   ${hero}\n K/D/A\t:   ${result["kills"]}/${result["deaths"]}/${result["assists"]}\n GPM\t:   ${result["gold_per_min"]}\n XPM\t:   ${result["xp_per_min"]}\n`;
+                            } catch (e) {
+                                message += "\nError Retrieving Match Data\n";
+                                console.error(message);
+                            }
                         }
+                        msg.channel.send("This is the result of recent 5 matches.\n" + message);
+                    } else {
+                        msg.channel.send("Sorry. Unexpected error while retrieving hero data");
                     }
-                    msg.channel.send("This is the result of recent 5 matches.\n"+message);
-                }else {
-
-                }
-            });
+                });
+            }else {
+                msg.channel.send("Please Type Dota2 Account ID");
+            }
         }
     }
     if(replyMessage)msg.channel.send(replyMessage, {tts: isTTS});
